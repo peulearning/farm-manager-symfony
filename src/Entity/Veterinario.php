@@ -7,9 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: VeterinarioRepository::class)]
 #[ORM\Table(name: 'veterinarios')]
+#[UniqueEntity(fields: ['crmv'], message: 'Já existe um veterinário cadastrado com este CRMV.')]
 class Veterinario
 {
 
