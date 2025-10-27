@@ -16,6 +16,60 @@ class VeterinarioRepository extends ServiceEntityRepository
         parent::__construct($registry, Veterinario::class);
     }
 
+
+    public function save(Veterinario $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Veterinario $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+
+    public function findByCrmv(string $crmv): ?Veterinario
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.crmv = :crmv')
+            ->setParameter('crmv', $crmv)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findByNome(string $nome): array
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.nome LIKE :nome')
+            ->setParameter('nome', '%' . $nome . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function existsByCrmv(string $crmv): bool
+    {
+        $result = $this->createQueryBuilder('v')
+            ->select('COUNT(v.id)')
+            ->andWhere('v.crmv = :crmv')
+            ->setParameter('crmv', $crmv)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result > 0;
+    }
+
+    
+
+
+
     //    /**
     //     * @return Veterinario[] Returns an array of Veterinario objects
     //     */
