@@ -60,4 +60,19 @@ class GadoRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+        public function existsCodigoVivo(string $codigo, ?int $exceptId = null): bool
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->select('COUNT(g.id)')
+            ->where('g.codigo = :codigo')
+            ->andWhere('g.vivo = true')
+            ->setParameter('codigo', $codigo);
+
+        if ($exceptId) {
+            $qb->andWhere('g.id != :id')->setParameter('id', $exceptId);
+        }
+
+        return (int)$qb->getQuery()->getSingleScalarResult() > 0;
+    }
 }
