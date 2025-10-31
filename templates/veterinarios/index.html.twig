@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h1>Veterinários</h1>
+
+<a class="btn btn-primary mb-3" href="{{ path('veterinario_new') }}">Novo Veterinário</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>CRMV</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for v in pagination %}
+      <tr>
+        <td>{{ v.id }}</td>
+        <td>{{ v.nome }}</td>
+        <td>{{ v.crmv }}</td>
+        <td>
+          <a href="{{ path('veterinario_edit', {id: v.id}) }}" class="btn btn-sm btn-warning">Editar</a>
+          <form method="post" action="{{ path('veterinario_delete', {id: v.id}) }}" style="display:inline-block" onsubmit="return confirm('Tem certeza?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ v.id) }}">
+            <button class="btn btn-sm btn-danger">Excluir</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4">Nenhum veterinário cadastrado.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{{ knp_pagination_render(pagination) }}
+{% endblock %}

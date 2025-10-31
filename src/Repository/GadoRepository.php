@@ -3,12 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Gado;
+use App\Entity\Fazenda;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Gado>
- */
 class GadoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,28 +14,50 @@ class GadoRepository extends ServiceEntityRepository
         parent::__construct($registry, Gado::class);
     }
 
-    //    /**
-    //     * @return Gado[] Returns an array of Gado objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('g.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findAbatidos(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.vivo = false')
+            ->orderBy('g.dataAbate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Gado
-    //    {
-    //        return $this->createQueryBuilder('g')
-    //            ->andWhere('g.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function totalLeiteSemana(): float
+    {
+        $total = $this->createQueryBuilder('g')
+            ->select('SUM(g.leite)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return $total * 7;
+    }
+
+    public function totalRacaoSemana(): float
+    {
+        $total = $this->createQueryBuilder('g')
+            ->select('SUM(g.racao)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return $total * 7;
+    }
+
+    public function animaisParaAbate(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.vivo = true')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function animaisComMenosDeUmAnoMaisDe500kg(): array
+    {
+        $umAnoAtras = new \DateTime('-1 year');
+
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.dataNascimento > :umAno')
+            ->setParameter('umAno', $umAnoAtras)
+            ->andWhere('(g.racao * 7) > 500')
+            ->getQuery()
+            ->getResult();
+    }
 }
