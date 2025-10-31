@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Editar Gado{% endblock %}
+{% block body %}
+<h1>Editar Gado #{{ gado.id }}</h1>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-warning mt-3">Salvar Alterações</button>
+{{ form_end(form) }}
+
+<a href="{{ path('gados_index') }}" class="btn btn-secondary mt-3">Voltar</a>
+{% endblock %}

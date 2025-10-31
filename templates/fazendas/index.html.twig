@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block title %}Lista de Fazendas{% endblock %}
+{% block body %}
+<h1 class="mb-3">🏠 Fazendas</h1>
+
+<a href="{{ path('fazendas_new') }}" class="btn btn-success mb-3">+ Nova Fazenda</a>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-success">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Tamanho (ha)</th>
+            <th>Responsável</th>
+            <th>Veterinários</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fazenda in fazendas %}
+            <tr>
+                <td>{{ fazenda.id }}</td>
+                <td>{{ fazenda.nome }}</td>
+                <td>{{ fazenda.tamanho }}</td>
+                <td>{{ fazenda.responsavel }}</td>
+                <td>
+                    {% for vet in fazenda.veterinarios %}
+                        <span class="badge bg-info text-dark">{{ vet.nome }}</span>
+                    {% else %}
+                        <small class="text-muted">Nenhum</small>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('fazendas_show', {id: fazenda.id}) }}" class="btn btn-sm btn-primary">Ver</a>
+                    <a href="{{ path('fazendas_edit', {id: fazenda.id}) }}" class="btn btn-sm btn-warning">Editar</a>
+                    <form method="post" action="{{ path('fazendas_delete', {id: fazenda.id}) }}" class="d-inline" onsubmit="return confirm('Excluir fazenda?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fazenda.id) }}">
+                        <button class="btn btn-sm btn-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6" class="text-center">Nenhuma fazenda cadastrada.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

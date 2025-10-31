@@ -1,37 +1,49 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}Lista de Veterinários{% endblock %}
+
 {% block body %}
-<h1>Veterinários</h1>
+<h1 class="mb-3">🩺 Veterinários</h1>
 
-<a class="btn btn-primary mb-3" href="{{ path('veterinario_new') }}">Novo Veterinário</a>
+<a href="{{ path('veterinarios_new') }}" class="btn btn-success mb-3">+ Novo Veterinário</a>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>CRMV</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for v in pagination %}
-      <tr>
-        <td>{{ v.id }}</td>
-        <td>{{ v.nome }}</td>
-        <td>{{ v.crmv }}</td>
-        <td>
-          <a href="{{ path('veterinario_edit', {id: v.id}) }}" class="btn btn-sm btn-warning">Editar</a>
-          <form method="post" action="{{ path('veterinario_delete', {id: v.id}) }}" style="display:inline-block" onsubmit="return confirm('Tem certeza?');">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ v.id) }}">
-            <button class="btn btn-sm btn-danger">Excluir</button>
-          </form>
-        </td>
-      </tr>
-    {% else %}
-      <tr><td colspan="4">Nenhum veterinário cadastrado.</td></tr>
-    {% endfor %}
-  </tbody>
+<table class="table table-striped table-bordered">
+    <thead class="table-success">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CRMV</th>
+            <th>Fazendas Associadas</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for veterinario in veterinarios %}
+            <tr>
+                <td>{{ veterinario.id }}</td>
+                <td>{{ veterinario.nome }}</td>
+                <td>{{ veterinario.crmv }}</td>
+                <td>
+                    {% if veterinario.fazendas is not empty %}
+                        {% for fazenda in veterinario.fazendas %}
+                            <span class="badge bg-info text-dark">{{ fazenda.nome }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <small class="text-muted">Nenhuma fazenda associada</small>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('veterinarios_show', {id: veterinario.id}) }}" class="btn btn-sm btn-primary">Ver</a>
+                    <a href="{{ path('veterinarios_edit', {id: veterinario.id}) }}" class="btn btn-sm btn-warning">Editar</a>
+                    <form method="post" action="{{ path('veterinarios_delete', {id: veterinario.id}) }}" class="d-inline" onsubmit="return confirm('Excluir este veterinário?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ veterinario.id) }}">
+                        <button class="btn btn-sm btn-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5" class="text-center">Nenhum veterinário cadastrado.</td></tr>
+        {% endfor %}
+    </tbody>
 </table>
-
-{{ knp_pagination_render(pagination) }}
 {% endblock %}

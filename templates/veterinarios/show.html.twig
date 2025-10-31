@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalhes do Veterinário{% endblock %}
+
+{% block body %}
+<h1>Detalhes do Veterinário</h1>
+
+<ul class="list-group mb-3">
+    <li class="list-group-item"><strong>ID:</strong> {{ veterinario.id }}</li>
+    <li class="list-group-item"><strong>Nome:</strong> {{ veterinario.nome }}</li>
+    <li class="list-group-item"><strong>CRMV:</strong> {{ veterinario.crmv }}</li>
+    <li class="list-group-item">
+        <strong>Fazendas Associadas:</strong>
+        {% if veterinario.fazendas is not empty %}
+            {% for fazenda in veterinario.fazendas %}
+                <span class="badge bg-info text-dark">{{ fazenda.nome }}</span>
+            {% endfor %}
+        {% else %}
+            <span class="text-muted">Nenhuma fazenda associada</span>
+        {% endif %}
+    </li>
+</ul>
+
+<a href="{{ path('veterinarios_index') }}" class="btn btn-secondary mt-3">Voltar</a>
+{% endblock %}

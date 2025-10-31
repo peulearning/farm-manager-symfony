@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}Detalhes do Gado{% endblock %}
+{% block body %}
+<h1>Detalhes do Gado</h1>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>Código:</strong> {{ gado.codigo }}</li>
+    <li class="list-group-item"><strong>Fazenda:</strong> {{ gado.fazenda.nome }}</li>
+    <li class="list-group-item"><strong>Peso:</strong> {{ gado.peso }} kg</li>
+    <li class="list-group-item"><strong>Leite:</strong> {{ gado.leite }} L/semana</li>
+    <li class="list-group-item"><strong>Ração:</strong> {{ gado.racao }} kg/semana</li>
+    <li class="list-group-item"><strong>Data de Nascimento:</strong> {{ gado.dataNascimento|date('d/m/Y') }}</li>
+    <li class="list-group-item"><strong>Status:</strong> {{ gado.vivo ? 'Vivo' : 'Abatido' }}</li>
+</ul>
+
+<a href="{{ path('gados_index') }}" class="btn btn-secondary mt-3">Voltar</a>
+{% endblock %}

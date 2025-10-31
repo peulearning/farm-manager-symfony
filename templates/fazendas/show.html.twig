@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Detalhes da Fazenda{% endblock %}
+{% block body %}
+<h1>Detalhes da Fazenda</h1>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>Nome:</strong> {{ fazenda.nome }}</li>
+    <li class="list-group-item"><strong>Tamanho:</strong> {{ fazenda.tamanho }} ha</li>
+    <li class="list-group-item"><strong>Responsável:</strong> {{ fazenda.responsavel }}</li>
+    <li class="list-group-item">
+        <strong>Veterinários:</strong>
+        {% for vet in fazenda.veterinarios %}
+            <span class="badge bg-info text-dark">{{ vet.nome }}</span>
+        {% else %}
+            Nenhum
+        {% endfor %}
+    </li>
+</ul>
+
+<a href="{{ path('fazendas_index') }}" class="btn btn-secondary mt-3">Voltar</a>
+{% endblock %}
