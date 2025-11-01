@@ -17,7 +17,7 @@ class Fazenda
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank]
     private string $nome;
 
@@ -25,40 +25,107 @@ class Fazenda
     #[Assert\Positive]
     private float $tamanho; // hectares
 
-    #[ORM\OneToMany(mappedBy: 'fazenda', targetEntity: Gado::class, cascade: ['remove'])]
-    private Collection $gados;
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    private string $responsavel;
 
     #[ORM\ManyToMany(targetEntity: Veterinario::class, inversedBy: 'fazendas')]
-    #[ORM\JoinTable(name: 'fazenda_veterinario')]
+    #[ORM\JoinTable(name: 'fazenda_veterinarios')]
     private Collection $veterinarios;
+
+    #[ORM\OneToMany(mappedBy: 'fazenda', targetEntity: Gado::class, cascade: ['persist', 'remove'])]
+    private Collection $gados;
 
     public function __construct()
     {
-        $this->gados = new ArrayCollection();
         $this->veterinarios = new ArrayCollection();
+        $this->gados = new ArrayCollection();
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getNome(): string { return $this->nome; }
-    public function setNome(string $nome): self { $this->nome = $nome; return $this; }
-
-    public function getTamanho(): float { return $this->tamanho; }
-    public function setTamanho(float $tamanho): self { $this->tamanho = $tamanho; return $this; }
-
-    /** @return Collection<int, Gado> */
-    public function getGados(): Collection { return $this->gados; }
-
-    /** @return Collection<int, Veterinario> */
-    public function getVeterinarios(): Collection { return $this->veterinarios; }
-
-    // Regra: cada fazenda suporta no máximo 18 animais por hectare
-    public function limiteAnimais(): int
+    public function getId(): ?int
     {
-        return (int)($this->tamanho * 18);
+        return $this->id;
     }
 
-    public function atingiuLimite(): bool
+    public function getNome(): string
     {
-        return $this->gados->count() >= $this->limiteAnimais();
+        return $this->nome;
+    }
+
+    public function setNome(string $nome): self
+    {
+        $this->nome = $nome;
+        return $this;
+    }
+
+    public function getTamanho(): float
+    {
+        return $this->tamanho;
+    }
+
+    public function setTamanho(float $tamanho): self
+    {
+        $this->tamanho = $tamanho;
+        return $this;
+    }
+
+    public function getResponsavel(): string
+    {
+        return $this->responsavel;
+    }
+
+    public function setResponsavel(string $responsavel): self
+    {
+        $this->responsavel = $responsavel;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Veterinario>
+     */
+    public function getVeterinarios(): Collection
+    {
+        return $this->veterinarios;
+    }
+
+    public function addVeterinario(Veterinario $veterinario): self
+    {
+        if (!$this->veterinarios->contains($veterinario)) {
+            $this->veterinarios->add($veterinario);
+        }
+        return $this;
+    }
+
+    public function removeVeterinario(Veterinario $veterinario): self
+    {
+        $this->veterinarios->removeElement($veterinario);
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Gado>
+     */
+    public function getGados(): Collection
+    {
+        return $this->gados;
+    }
+
+    public function addGado(Gado $gado): self
+    {
+        if (!$this->gados->contains($gado)) {
+            $this->gados->add($gado);
+            $gado->setFazenda($this);
+        }
+        return $this;
+    }
+
+    public function removeGado(Gado $gado): self
+    {
+        if ($this->gados->removeElement($gado)) {
+            if ($gado->getFazenda() === $this) {
+                $gado->setFazenda(null);
+            }
+        }
+        return $this;
     }
 }
