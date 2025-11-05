@@ -41,7 +41,7 @@ class FazendaController extends AbstractController
             return $this->redirectToRoute('fazendas_index');
         }
 
-        return $this->renderForm('fazendas/new.html.twig', [
+        return $this->render('fazendas/new.html.twig', [
             'form' => $form,
         ]);
     }

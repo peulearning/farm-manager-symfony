@@ -58,7 +58,7 @@ class GadoController extends AbstractController
             return $this->redirectToRoute('gados_index');
         }
 
-        return $this->renderForm('gados/new.html.twig', [
+        return $this->render('gados/new.html.twig', [
             'form' => $form,
         ]);
     }
