@@ -235,7 +235,7 @@ Melhor desempenho em listagens extensas.
 
 ## 🗂️ 14. Banco de Dados — Modelo Lógico
 
-``
+```
 Veterinario (id, nome, crmv)
 ⬋⬊ ManyToMany
 Fazenda (id, nome, tamanho, responsavel)
