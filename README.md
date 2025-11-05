@@ -250,5 +250,4 @@ Gado (id, codigo, leite, racao, peso, dataNascimento, vivo, dataAbate, fazenda_i
 
 👨‍💻 **Pedro Henrique Araújo Mattos Ribeiro**
 💡 Desenvolvedor Web Full Stack
-
 ---
