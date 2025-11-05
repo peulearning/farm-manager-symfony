@@ -248,6 +248,7 @@ Gado (id, codigo, leite, racao, peso, dataNascimento, vivo, dataAbate, fazenda_i
 
 ## 🧾 15. Autor
 
-👨‍💻 **Pedro Henrique Araújo Mattos Ribeiro**
-💡 Desenvolvedor Web Full Stack
+- 👨‍💻 **Pedro Henrique Araújo Mattos Ribeiro** 
+- 💡 Desenvolvedor Web Full Stack
+
 ---
