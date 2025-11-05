@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Relatórios Semanais{% endblock %}
+
+{% block body %}
+  <h2 class="mb-4">📊 Relatórios da Fazenda</h2>
+
+  <div class="mb-4">
+    <h4>🐄 Total de leite produzido por semana:</h4>
+    <p><strong>{{ totalLeiteSemana|number_format(2, ',', '.') }} litros</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h4>🌾 Total de ração necessária por semana:</h4>
+    <p><strong>{{ totalRacaoSemana|number_format(2, ',', '.') }} kg</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h4>🐮 Animais abatidos:</h4>
+    {% if animaisAbatidos is not empty %}
+      <ul>
+        {% for gado in animaisAbatidos %}
+          <li>{{ gado.codigo }} — Abatido em {{ gado.dataAbate ? gado.dataAbate|date('d/m/Y H:i') : 'Data desconhecida' }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nenhum animal abatido até o momento.</p>
+    {% endif %}
+  </div>
+
+  <div>
+    <h4>🐄 Animais com até 1 ano e mais de 500kg de ração por semana:</h4>
+    {% if animaisAteUmAno is not empty %}
+      <ul>
+        {% for gado in animaisAteUmAno %}
+          <li>
+            {{ gado.codigo }} — {{ gado.getRacaoSemana()|number_format(2, ',', '.') }} kg/semana
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nenhum animal se enquadra nesse critério.</p>
+    {% endif %}
+  </div>
+
+  <hr>
+  <a href="{{ path('gados_index') }}" class="btn btn-primary mt-3">Gerenciar Gados</a>
+{% endblock %}

@@ -9,10 +9,12 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ path('fazendas_index') }}">Farm Manager</a>
+        <a class="navbar-brand fw-bold" href="{{ path('relatorios_inicial') }}">Farm Manager</a>
         <div>
-            <a class="nav-link d-inline text-white" href="{{ path('gados_index') }}">🐄 Gados</a>
-            <a class="nav-link d-inline text-white" href="{{ path('fazendas_index') }}">🏠 Fazendas</a>
+             <a href="{{ path('relatorios_inicial') }}" class="btn btn-outline-dark btn-sm">🏠 Início</a>
+             <a href="{{ path('gados_index') }}" class="btn btn-outline-dark btn-sm">🐄 Gados</a>
+             <a href="{{ path('fazendas_index') }}" class="btn btn-outline-dark btn-sm">🏡 Fazendas</a>
+             <a href="{{ path('veterinario_index') }}" class="btn btn-outline-dark btn-sm">👨‍⚕️ Veterinários</a>
         </div>
     </div>
 </nav>
